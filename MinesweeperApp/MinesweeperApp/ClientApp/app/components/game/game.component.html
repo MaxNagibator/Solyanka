@@ -1,0 +1,10 @@
+<h1>Hello, pussy :3</h1>
+
+<p *ngIf="!fields"><em>Loading...</em></p>
+
+<span *ngFor="let field of fields; let x = index" class="field-row">
+    <span *ngFor="let f of field; let y = index" class="field" 
+          (click)="open(f,x,y)"
+          ng-class="field.open ? 'field-open':''">
+    </span>
+</span>

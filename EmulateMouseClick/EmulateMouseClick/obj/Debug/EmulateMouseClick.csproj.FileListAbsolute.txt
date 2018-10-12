@@ -1,0 +1,9 @@
+D:\Work\Source\Visual Studio 2010\Projects\EmulateMouseClick\EmulateMouseClick\bin\Debug\EmulateMouseClick.exe.config
+D:\Work\Source\Visual Studio 2010\Projects\EmulateMouseClick\EmulateMouseClick\bin\Debug\EmulateMouseClick.exe
+D:\Work\Source\Visual Studio 2010\Projects\EmulateMouseClick\EmulateMouseClick\bin\Debug\EmulateMouseClick.pdb
+D:\Work\Source\Visual Studio 2010\Projects\EmulateMouseClick\EmulateMouseClick\obj\Debug\EmulateMouseClick.csprojResolveAssemblyReference.cache
+D:\Work\Source\Visual Studio 2010\Projects\EmulateMouseClick\EmulateMouseClick\obj\Debug\EmulateMouseClick.Form1.resources
+D:\Work\Source\Visual Studio 2010\Projects\EmulateMouseClick\EmulateMouseClick\obj\Debug\EmulateMouseClick.Properties.Resources.resources
+D:\Work\Source\Visual Studio 2010\Projects\EmulateMouseClick\EmulateMouseClick\obj\Debug\EmulateMouseClick.csproj.GenerateResource.Cache
+D:\Work\Source\Visual Studio 2010\Projects\EmulateMouseClick\EmulateMouseClick\obj\Debug\EmulateMouseClick.exe
+D:\Work\Source\Visual Studio 2010\Projects\EmulateMouseClick\EmulateMouseClick\obj\Debug\EmulateMouseClick.pdb

@@ -1,0 +1,14 @@
+.field-row {
+    display: inline-block;
+    height: 20px;
+}
+.field {
+    background: gray;
+    height: 20px;
+    width: 20px;
+    border: 1px solid black;
+    display: block;
+}
+.field.field-open {
+ background: red;
+}

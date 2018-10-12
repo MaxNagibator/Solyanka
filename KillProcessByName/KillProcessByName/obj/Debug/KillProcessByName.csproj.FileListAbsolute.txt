@@ -1,0 +1,9 @@
+D:\Work\Source\NewDocumentEditor\KillProcessByName\KillProcessByName\bin\Debug\KillProcessByName.exe.config
+D:\Work\Source\NewDocumentEditor\KillProcessByName\KillProcessByName\bin\Debug\KillProcessByName.exe
+D:\Work\Source\NewDocumentEditor\KillProcessByName\KillProcessByName\bin\Debug\KillProcessByName.pdb
+D:\Work\Source\NewDocumentEditor\KillProcessByName\KillProcessByName\obj\Debug\KillProcessByName.Form1.resources
+D:\Work\Source\NewDocumentEditor\KillProcessByName\KillProcessByName\obj\Debug\KillProcessByName.Properties.Resources.resources
+D:\Work\Source\NewDocumentEditor\KillProcessByName\KillProcessByName\obj\Debug\KillProcessByName.csproj.GenerateResource.Cache
+D:\Work\Source\NewDocumentEditor\KillProcessByName\KillProcessByName\obj\Debug\KillProcessByName.exe
+D:\Work\Source\NewDocumentEditor\KillProcessByName\KillProcessByName\obj\Debug\KillProcessByName.pdb
+D:\Work\Source\NewDocumentEditor\KillProcessByName\KillProcessByName\obj\Debug\KillProcessByName.csprojResolveAssemblyReference.cache

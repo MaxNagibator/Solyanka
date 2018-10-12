@@ -1,0 +1,9 @@
+D:\GricinaMA\Solyanka\FileSorter\FileSorter\FileSorter\bin\Debug\FileSorter.exe.config
+D:\GricinaMA\Solyanka\FileSorter\FileSorter\FileSorter\bin\Debug\FileSorter.exe
+D:\GricinaMA\Solyanka\FileSorter\FileSorter\FileSorter\bin\Debug\FileSorter.pdb
+D:\GricinaMA\Solyanka\FileSorter\FileSorter\FileSorter\obj\Debug\FileSorter.csprojResolveAssemblyReference.cache
+D:\GricinaMA\Solyanka\FileSorter\FileSorter\FileSorter\obj\Debug\FileSorter.Form1.resources
+D:\GricinaMA\Solyanka\FileSorter\FileSorter\FileSorter\obj\Debug\FileSorter.Properties.Resources.resources
+D:\GricinaMA\Solyanka\FileSorter\FileSorter\FileSorter\obj\Debug\FileSorter.csproj.GenerateResource.Cache
+D:\GricinaMA\Solyanka\FileSorter\FileSorter\FileSorter\obj\Debug\FileSorter.exe
+D:\GricinaMA\Solyanka\FileSorter\FileSorter\FileSorter\obj\Debug\FileSorter.pdb
