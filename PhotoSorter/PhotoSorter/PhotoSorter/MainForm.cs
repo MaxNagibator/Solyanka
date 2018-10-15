@@ -20,9 +20,17 @@ namespace PhotoSorter
             InitializeComponent();
         }
 
-        private void MainForm_Load(object sender, EventArgs e)
+
+    private void MainForm_Load(object sender, EventArgs e)
+    {
+
+    }
+
+        private void button1_Click(object sender, EventArgs e)
         {
-            var path = @"D:\Documents\мои документы\Мои рисунки\photo\Sort\photo";
+
+            var path = folderTextBox.Text;
+
             var directoryInfo = new DirectoryInfo(path);
             var fileList = directoryInfo.GetFiles().Where(x => x.Extension.ToLower() == ".jpg").ToList();
             var fileDates = new Dictionary<FileInfo, DateTime>();
@@ -57,7 +65,7 @@ namespace PhotoSorter
 
             textBox1.Text = fileDates.Count.ToString();
 
-            var destinationForlder = @"D:\Documents\мои документы\Мои рисунки\photo\Sort\photo\Sorted";
+            var destinationForlder = path+@"\Sorted";
             foreach (var fileDate in fileDates)
             {
                 var subFolder = fileDate.Value.ToString("yyyy");
@@ -118,6 +126,5 @@ namespace PhotoSorter
 
                 return tagValue.ToString();
             }
-    
     }
 }
