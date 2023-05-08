@@ -28,46 +28,76 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.folderTextBox = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.uiOutputTextBox = new System.Windows.Forms.TextBox();
+            this.uiFolderTextBox = new System.Windows.Forms.TextBox();
+            this.uiSortButton = new System.Windows.Forms.Button();
+            this.uiFileTypeTextBox = new System.Windows.Forms.TextBox();
+            this.uiMainProgressBar = new System.Windows.Forms.ProgressBar();
             this.SuspendLayout();
             // 
-            // textBox1
+            // uiOutputTextBox
             // 
-            this.textBox1.Location = new System.Drawing.Point(161, 71);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(260, 238);
-            this.textBox1.TabIndex = 0;
+            this.uiOutputTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.uiOutputTextBox.Location = new System.Drawing.Point(12, 127);
+            this.uiOutputTextBox.Multiline = true;
+            this.uiOutputTextBox.Name = "uiOutputTextBox";
+            this.uiOutputTextBox.Size = new System.Drawing.Size(629, 182);
+            this.uiOutputTextBox.TabIndex = 0;
             // 
-            // folderTextBox
+            // uiFolderTextBox
             // 
-            this.folderTextBox.Location = new System.Drawing.Point(12, 12);
-            this.folderTextBox.Name = "folderTextBox";
-            this.folderTextBox.Size = new System.Drawing.Size(629, 20);
-            this.folderTextBox.TabIndex = 1;
-            this.folderTextBox.Text = "D:\\Documents\\Photo\\UmsPC\\PhotoPhoneAfterRecovery2";
+            this.uiFolderTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.uiFolderTextBox.Location = new System.Drawing.Point(12, 12);
+            this.uiFolderTextBox.Name = "uiFolderTextBox";
+            this.uiFolderTextBox.Size = new System.Drawing.Size(629, 20);
+            this.uiFolderTextBox.TabIndex = 1;
+            this.uiFolderTextBox.Text = "D:\\Photos\\202207(2022.12.07)";
             // 
-            // button1
+            // uiSortButton
             // 
-            this.button1.Location = new System.Drawing.Point(12, 38);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(629, 23);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "Вбей в текстбокс путь к папке, а потом нажми сюда, там появится папка сортид куда" +
+            this.uiSortButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.uiSortButton.Location = new System.Drawing.Point(12, 64);
+            this.uiSortButton.Name = "uiSortButton";
+            this.uiSortButton.Size = new System.Drawing.Size(629, 23);
+            this.uiSortButton.TabIndex = 2;
+            this.uiSortButton.Text = "Вбей в текстбокс путь к папке, а потом нажми сюда, там появится папка сортид куда" +
     " всё переместится";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.uiSortButton.UseVisualStyleBackColor = true;
+            this.uiSortButton.Click += new System.EventHandler(this.uiSortButton_Click);
+            // 
+            // uiFileTypeTextBox
+            // 
+            this.uiFileTypeTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.uiFileTypeTextBox.Location = new System.Drawing.Point(12, 38);
+            this.uiFileTypeTextBox.Name = "uiFileTypeTextBox";
+            this.uiFileTypeTextBox.Size = new System.Drawing.Size(629, 20);
+            this.uiFileTypeTextBox.TabIndex = 3;
+            this.uiFileTypeTextBox.Text = "jpg,jpeg,heic,mov";
+            // 
+            // uiMainProgressBar
+            // 
+            this.uiMainProgressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.uiMainProgressBar.Location = new System.Drawing.Point(12, 93);
+            this.uiMainProgressBar.Name = "uiMainProgressBar";
+            this.uiMainProgressBar.Size = new System.Drawing.Size(629, 23);
+            this.uiMainProgressBar.TabIndex = 4;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(653, 321);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.folderTextBox);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.uiMainProgressBar);
+            this.Controls.Add(this.uiFileTypeTextBox);
+            this.Controls.Add(this.uiSortButton);
+            this.Controls.Add(this.uiFolderTextBox);
+            this.Controls.Add(this.uiOutputTextBox);
             this.Name = "MainForm";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.MainForm_Load);
@@ -78,9 +108,11 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox folderTextBox;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TextBox uiOutputTextBox;
+        private System.Windows.Forms.TextBox uiFolderTextBox;
+        private System.Windows.Forms.Button uiSortButton;
+        private System.Windows.Forms.TextBox uiFileTypeTextBox;
+        private System.Windows.Forms.ProgressBar uiMainProgressBar;
     }
 }
 

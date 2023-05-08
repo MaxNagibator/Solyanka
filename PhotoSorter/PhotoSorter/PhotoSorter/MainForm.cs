@@ -1,14 +1,7 @@
-﻿using ExifLib;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System;
 using System.Data;
-using System.Drawing;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PhotoSorter
@@ -21,110 +14,139 @@ namespace PhotoSorter
         }
 
 
-    private void MainForm_Load(object sender, EventArgs e)
-    {
-
-    }
-
-        private void button1_Click(object sender, EventArgs e)
+        private void MainForm_Load(object sender, EventArgs e)
         {
 
-            var path = folderTextBox.Text;
+        }
 
+        private void uiSortButton_Click(object sender, EventArgs e)
+        {
+            uiOutputTextBox.Text = "";
+
+            var path = uiFolderTextBox.Text;
             var directoryInfo = new DirectoryInfo(path);
-            var fileList = directoryInfo.GetFiles().Where(x => x.Extension.ToLower() == ".jpg").ToList();
-            var fileDates = new Dictionary<FileInfo, DateTime>();
-            foreach (var fileInfo in fileList)
+            var fileExtensions = uiFileTypeTextBox.Text.Split(',').Select(x => "." + x.ToLower()).ToArray();
+            var fileList = directoryInfo.GetFiles().Where(x => fileExtensions.Contains(x.Extension.ToLower()))
+                .Select(x => new SortedFile { Name = x.Name, FullName = x.FullName, Extension = x.Extension.ToLower() })
+                .ToList();
+
+            uiMainProgressBar.Value = 0;
+            uiMainProgressBar.Maximum = fileList.Count() * 2;
+
+            // видосы вконец, чтоб раскидать вместе с фотками
+            foreach (var fileInfo in fileList.OrderBy(x => x.Extension == ".mov"))
             {
+                uiMainProgressBar.Value++;
                 try
                 {
-                    using (var reader = new ExifReader(fileInfo.FullName))
+                    var fileName = fileInfo.Name;
+                    var ext = fileInfo.Extension;
+                    OperationResult getDateResult;
+                    if (ext == ".jpg" || ext == ".jpeg")
                     {
-                        //textBox1.Text += Format(reader, (ushort)ExifTags.DateTimeOriginal);
-                        var date = Format(reader, (ushort) ExifTags.DateTimeOriginal);
-                        if (date == null)
+                        getDateResult = JpegParser.GetDate(fileInfo.FullName);
+                    }
+                    else if (ext == ".heic")
+                    {
+                        getDateResult = HeicParser.GetDate(fileInfo.FullName);
+                    }
+                    else if (ext == ".mov")
+                    {
+                        getDateResult = MovParser.GetDate(fileInfo.FullName);
+                    }
+                    else
+                    {
+                        uiOutputTextBox.Text += "skip type " + ext + Environment.NewLine;
+                        continue;
+                    }
+                    if (getDateResult.Success)
+                    {
+                        DateTime? date = null;
+                        if (getDateResult.Value != null)
                         {
-                            date = Format(reader, (ushort) ExifTags.DateTime);
+                            try
+                            {
+                                date = DateTime.ParseExact(getDateResult.Value, "yyyy:MM:dd HH:mm:ss", null);
+                            }
+                            catch (Exception exception)
+                            {
+                            }
+                            try
+                            {
+                                date = DateTime.ParseExact(getDateResult.Value, "ddd MMM dd HH:mm:ss yyyy", null);
+                            }
+                            catch (Exception exception)
+                            {
+                            }
+
+                            try
+                            {
+                                date = DateTime.ParseExact(getDateResult.Value, "ddd MMM dd HH:mm:ss zzz yyyy", null);
+                            }
+                            catch (Exception exception)
+                            {
+                            }
                         }
 
-                        try
+                        if (date == null)
                         {
-                            fileDates.Add(fileInfo, DateTime.ParseExact(date, "yyyy:MM:dd HH:mm:ss", null));
+                            uiOutputTextBox.Text += $"date '{date}' not parsed: " + Environment.NewLine;
                         }
-                        catch (Exception exception)
+                        else
                         {
-                            //очень жаль
+                            fileInfo.Date = date.Value;
+                        }
+
+                    }
+                    else
+                    {
+                        var ifVideoForPhoto = false;
+                        if (ext == ".mov")
+                        {
+                            var searched = fileName.ToLower().Replace(".mov", ".heic");
+                            var f = fileList.FirstOrDefault(x => x.Name.ToLower() == searched);
+                            if (f != null)
+                            {
+                                f.VideoForPhoto = fileInfo;
+                                ifVideoForPhoto = true;
+                            }
+                        }
+
+                        if (!ifVideoForPhoto)
+                        {
+                            uiOutputTextBox.Text += getDateResult.Value + Environment.NewLine;
                         }
                     }
                 }
                 catch (Exception exception)
                 {
-                    //очень жаль
+                    uiOutputTextBox.Text += exception.Message + Environment.NewLine;
                 }
             }
 
-            textBox1.Text = fileDates.Count.ToString();
+            uiOutputTextBox.Text += fileList.Count.ToString();
 
-            var destinationForlder = path+@"\Sorted";
-            foreach (var fileDate in fileDates)
+            var destinationForlder = path + @"\Sorted";
+            var forMove = fileList.Where(x => x.Date != null);
+            uiMainProgressBar.Value += (fileList.Count() - forMove.Count());
+            foreach (var moveFile in forMove)
             {
-                var subFolder = fileDate.Value.ToString("yyyy");
-                var subFolder2 = fileDate.Value.ToString("yy.MM");
+                uiMainProgressBar.Value++;
+                var subFolder = moveFile.Date.Value.ToString("yyyy");
+                var subFolder2 = moveFile.Date.Value.ToString("yy.MM");
                 var destination = Path.Combine(destinationForlder, subFolder, subFolder2);
                 if (!Directory.Exists(destination))
                 {
                     Directory.CreateDirectory(destination);
                 }
-                var dectinationFile = Path.Combine(destination, fileDate.Key.Name);
-                File.Move(fileDate.Key.FullName, dectinationFile);
+                var dectinationFile = Path.Combine(destination, moveFile.Name);
+                File.Move(moveFile.FullName, dectinationFile);
+                if (moveFile.VideoForPhoto != null)
+                {
+                    var dectinationFile2 = Path.Combine(destination, moveFile.VideoForPhoto.Name);
+                    File.Move(moveFile.VideoForPhoto.FullName, dectinationFile2);
+                }
             }
         }
-
-        /// <summary>
-        /// скопировал с образца
-        /// </summary>
-        private static string Format(ExifReader reader, ushort tagID, bool isNeedFormatPrefix = false)
-        {
-            object val;
-            if (reader.GetTagValue(tagID, out val))
-            {
-                // Special case - some doubles are encoded as TIFF rationals. These
-                // items can be retrieved as 2 element arrays of {numerator, denominator}
-                if (val is double)
-                {
-                    int[] rational;
-                    if (reader.GetTagValue(tagID, out rational))
-                        val = string.Format("{0} ({1}/{2})", val, rational[0], rational[1]);
-                }
-
-                if (isNeedFormatPrefix)
-                {
-                    return string.Format("{0}: {1}", Enum.GetName(typeof(ExifTags), tagID), RenderTag(val));
-                }
-
-                return RenderTag(val);
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// скопировал с образца
-        /// </summary>
-        private static string RenderTag(object tagValue)
-            {
-                // Arrays don't render well without assistance.
-                var array = tagValue as Array;
-                if (array != null)
-                {
-                    // Hex rendering for really big byte arrays (ugly otherwise)
-                    if (array.Length > 20 && array.GetType().GetElementType() == typeof(byte))
-                        return "0x" + string.Join("", array.Cast<byte>().Select(x => x.ToString("X2")).ToArray());
-
-                    return string.Join(", ", array.Cast<object>().Select(x => x.ToString()).ToArray());
-                }
-
-                return tagValue.ToString();
-            }
     }
 }
