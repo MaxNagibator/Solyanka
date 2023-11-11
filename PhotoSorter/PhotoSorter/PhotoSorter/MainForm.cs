@@ -3,6 +3,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using MetadataExtractor.Formats.Photoshop;
 
 namespace PhotoSorter
 {
@@ -21,9 +22,14 @@ namespace PhotoSorter
 
         private void uiSortButton_Click(object sender, EventArgs e)
         {
-            uiOutputTextBox.Text = "";
-
             var path = uiFolderTextBox.Text;
+            var destinationForlder = path + @"\Sorted";
+            Sort(path, destinationForlder);
+        }
+
+        private void Sort(string path, string destinationForlder)
+        {
+            uiOutputTextBox.Text = "";
             var directoryInfo = new DirectoryInfo(path);
             var fileExtensions = uiFileTypeTextBox.Text.Split(',').Select(x => "." + x.ToLower()).ToArray();
             var fileList = directoryInfo.GetFiles().Where(x => fileExtensions.Contains(x.Extension.ToLower()))
@@ -126,7 +132,6 @@ namespace PhotoSorter
 
             uiOutputTextBox.Text += fileList.Count.ToString();
 
-            var destinationForlder = path + @"\Sorted";
             var forMove = fileList.Where(x => x.Date != null);
             uiMainProgressBar.Value += (fileList.Count() - forMove.Count());
             foreach (var moveFile in forMove)
@@ -139,13 +144,75 @@ namespace PhotoSorter
                 {
                     Directory.CreateDirectory(destination);
                 }
-                var dectinationFile = Path.Combine(destination, moveFile.Name);
+
+                var dectinationFile = GetDestFile(moveFile.Name, destination);
                 File.Move(moveFile.FullName, dectinationFile);
                 if (moveFile.VideoForPhoto != null)
                 {
-                    var dectinationFile2 = Path.Combine(destination, moveFile.VideoForPhoto.Name);
+                    var dectinationFile2 = GetDestFile(moveFile.VideoForPhoto.Name, destination);
                     File.Move(moveFile.VideoForPhoto.FullName, dectinationFile2);
                 }
+            }
+
+            if (uiIncludeSubdirCheckBox.Checked)
+            {
+                var subPaths = Directory.GetDirectories(path);
+                foreach (var subPath in subPaths)
+                {
+                    var directoryInfo2 = new DirectoryInfo(subPath);
+                    Sort(subPath, destinationForlder);
+                }
+            }
+        }
+
+        private static string GetDestFile(string moveFileName, string destination)
+        {
+            var dectinationFile = Path.Combine(destination, moveFileName);
+            while (File.Exists(dectinationFile))
+            {
+                var dotIndex = moveFileName.LastIndexOf(".");
+                var origName = moveFileName;
+                var postfix = "";
+                if (dotIndex != -1)
+                {
+                    origName = moveFileName.Substring(0, dotIndex);
+                    postfix = moveFileName.Substring(dotIndex);
+
+                }
+                bool up = false;
+                if (origName.EndsWith(")") && origName.Contains("("))
+                {
+                    var i1 = origName.LastIndexOf("(");
+                    var i2 = origName.LastIndexOf(")");
+                    var number = origName.Substring(i1 + 1, i2 - i1 - 1);
+                    if (int.TryParse(number, out int num))
+                    {
+                        num++;
+                        // превращаем img_123(2) в img_123(3), или img_123 в img_123(2)
+                        origName = origName.Substring(0, i1) + "(" + num + ")";
+                        up = true;
+                    }
+                }
+                if (up == false)
+                {
+                    origName = origName + "(2)";
+                }
+                moveFileName = origName + postfix;
+                dectinationFile = Path.Combine(destination, moveFileName);
+            }
+
+            return dectinationFile;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var path = uiFolderTextBox.Text;
+            var directoryInfo = new DirectoryInfo(path);
+            var fileList = directoryInfo.GetFiles();
+            foreach (var file in fileList)
+            {
+                var newName = file.FullName.Substring(0, file.FullName.Length - file.Extension.Length) + "_2"+ file.Extension;
+                File.Move(file.FullName, newName);
             }
         }
     }
